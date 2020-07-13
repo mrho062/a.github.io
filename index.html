@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>CS 4641 Final Project: Food Review Analysis by mrho062</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">CS 4641 Final Project: Food Review Analysis</h1>
+      <h2 class="project-tagline">Matthew Rho, Prashant Sathambakkam, Sai Gogineni</h2>
+      <a href="https://github.com/mrho062/a.github.io" class="btn">View on GitHub</a>
+      <a href="https://github.com/mrho062/a.github.io/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/mrho062/a.github.io/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p>Motivation</p>
+<p>Almost every company that sells products or services online or physically will have a website that gives users the option to leave a rating with a review. For instance, Amazon has 310 million active users (as of September 2019) with an average of 4000 items sold per minute.  For these items, there are reviews that were left by the users that have a variety of ranges.</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/imagefolder/example1.PNG?token=AHQQDDI5FS7CIGF6OWOHNHC7CXQXE" alt=""></p>
+<p>[sinister, less, mislead] -&gt; negative</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/example2.PNG?token=AHQQDDPNSWQEUVBF6X47SBS7CXRES" alt=""></p>
+<p>[good, peaceful, fresh] -&gt; positive</p>
+<p>User reviews and ratings go hand-in-hand because of the possible correlation with the types of words that the users are writing that explains the ratings that they leave. Using data from a platform such as Amazon, we are exposed to a broad range of reviews for different products, which leaves more room for feature selection. For example, one project from a group of Stanford students measured the sentiment of reviews from Amazon using models such as K-nearest Neighbor and Linear Support Vector Machine.</p>
+<p>Our specific project deals with the correlation between reviews and ratings (ranging from 1-5). We are trying to answer the following question: is there a reliable way to predict the ratings based on the words that the user writes in their reviews? If we can predict the rating of a given user review or a group of user reviews about a product to a reasonable degree of accuracy, our project could be incredibly versatile for both PR companies and customers. Both will have a better understanding of what a product needs to have to be satisfactory. If we are successful in achieving these goals, our project could be generalizable to determine users’ overall ratings of a product from any number of reviews being given.</p>
+<p>Dataset</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/example3.PNG?token=AHQQDDNP6NX47NTVRLRKACK7CXROA" alt=""></p>
+<p>We picked our dataset from Kaggle. It seemed favorable because it had a decent number of reviews, each one with an accompanying rating. We were able to use this as a basis for our unsupervised learning project. The dataset itself has approximately 568,000 reviews, as well as 10 features for each review. There were some features that we decided to discard from our analysis immediately, such as ProductId, UserId, and ProfileName, and other features that we simply decided had no impact on the ratings given by the user. The features we were left with after filtering included HelpfulnessNumerator, HelpfulnessDenominator, Score, and Text of the product. Upon further analysis, we determined that the Summary had little to no correlation with the user rating, so we decided to drop it as well. This still left us with a fair amount of features to conduct analysis with, and it allowed us to experiment with data visualization and correlation calculations to determine which features had the most impact on user ratings. Shown below are bar graphs that represent the rating distribution of a sample of the amount of products being featured in our dataset.</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product1.PNG?token=AHQQDDJ2LIKAT6H5BHNUH7C7CXRTY" alt="">
+Product 1 (Kettle Chips)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product2.PNG?token=AHQQDDNHSP5T4TKDZP67IYC7CXR2C" alt="">
+Product 2 (Pop Chips)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product3.PNG?token=AHQQDDIZZLRPWSDLGFTDTMS7CXR3Y" alt="">
+Product 3 (Hot Cocoa)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product4.PNG?token=AHQQDDKKR7ZLDZKNLDPM2G27CXR6S" alt="">
+Product 4 (Pancake Mix)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product5.PNG?token=AHQQDDOBEP457JNCKOSTWPK7CXSAM" alt="">
+Product 5 (Juice)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product6.PNG?token=AHQQDDKSLCYPB6NQWTPARB27CXSCQ" alt="">
+Product 6 (Coffee)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product7.PNG?token=AHQQDDPI4LOGNT3TKCMTVXK7CXSEQ" alt="">
+Product 7 (Different Coffee brand)</p>
+<p>You can see below a graph that illustrates the correlation between ratings and the helpfulness numerator/denominator, another feature provided in the dataset. On kaggle, it is not said whether this dataset is hand classified, however we believe the data to be machine classified. If the data was classified by humans we would expect the helpfulness numerator/denominator distribution to behave in a somewhat normal form but as we can see in the graph below it does not:</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/gr1.PNG?token=AHQQDDJXF4EQTDJNIVV6NFC7CXSOI" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/gr2.PNG?token=AHQQDDIFPROUXIGBA6NVAE27CXSPQ" alt=""></p>
+<p>Approach:</p>
+<p>We decided to use the Naive Bayes Classifier to classify our reviews into negative, neutral, or positive categories. The Naive Bayes Classifier relies on Bayes Theorem and probabilistic known background to calculate posterior probability. It is a specific form of Natural Language Processing, which combines AI and computational linguistics to help computers understand human patterns of speech. Ours is a supervised learning approach. Basically, our process includes preprocessing the data, building a vocabulary, creating feature vectors for each word, training the Naive Bayes Classifier on these feature vectors, and finally testing the remaining tweets using the trained Naive Bayes Classifier.</p>
+<p>Preprocessing
+This is kind of like the review cleaning section. When we are looking at reviews trying to determine sentiment, we generally know what is important and what can be filtered out with little to no effect. Words are the most important part of the reviews; they give the most insight into the potential sentiment, whereas something like punctuation does not. We cannot determine if an exclamation point is being used in a negative or positive sense without context, which is provided by words. We applied the preprocessing to the reviews in both the training and the test datasets. Our review preprocessing can be seen in the process_review function; it includes converting all text to lowercase, removing URLs, removing usernames, removing #s, and removing repeated characters in words. Additionally, there is a universal list of stop words, such as “the” or “and”, that are also removed from the reviews in the preprocessing section.
+Below, you can see the effect of preprocessing on the actual text of the review. The column labeled “text” contains the original text, while the column labeled “new_text_2” contains the finalized, preprocessed review.</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/ex1.PNG?token=AHQQDDJFH5JG66CXJ4WON327CXSZ4" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/xe.PNG?token=AHQQDDIOBO6IWHTDJUOGPH27CXS3S" alt=""></p>
+<p>Building the Vocabulary and Creating Feature Vectors
+This step starts with creating a list of all the words in our training set. Then, we break the list into word features, which is a dictionary of the distinct words in the list of all words, and the key for each dictionary value is the frequency of that word in the dataset. Next, we have to match our vocabulary against our reviews. This involves checking whether the words in our vocabulary are present in each tweet. From here, we were able to create our word feature vectors using the apply_features() function in the nltk library of Python. This function does the actual feature extraction.</p>
+<p>Training and Testing the Classifier
+Again, we were able to use the built in Naive Bayes Classifier in the nltk library of Python. We trained this classifier on the word feature vectors we calculated in the previous step, using only the training split of the data. This code can take several minutes to execute. Once the classifier is trained, we can use its classify function to predict the sentiment labels of the tweets in the test data. This code can also take several minutes to execute.</p>
+<p>Experiments/Results
+We split our data into train and test four different ways: (90% train, 10% test), (80% train, 20% test), (70% train, 30% test), and (60% train, 40% test). Below we show the results of the different experiments (These results show the distribution of ratings calculated by our Naive Bayes Model for 3 out of the many products in the dataset):</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product19010.PNG?token=AHQQDDK6EW4D6O5QDKMX6PK7CXTCU" alt="">
+Product 1 (90% Train/ 10% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product18020.PNG?token=AHQQDDOBQSYWACZVEXPLMBK7CXTGQ" alt="">
+Product 1 (80% Train/ 20% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product17030.PNG?token=AHQQDDPDTAECGNHHPEUD7OC7CXTI6" alt="">
+Product 1 (70% Train/ 30% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product16040.PNG?token=AHQQDDOWBJ7YIW4PSKPOPZC7CXTLQ" alt="">
+Product 1 (60% Train/ 40% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product29010.PNG?token=AHQQDDO5NPFYNL3TSFNFDOK7CXTPC" alt="">
+Product 2 (90% Train/ 10% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product28020.PNG?token=AHQQDDN3WOMPGLCLYEDFMFC7CXTRE" alt="">
+Product 2 (80% Train/ 20% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product27030.PNG?token=AHQQDDKD5BQ425VEKOETMN27CXTSU" alt="">
+Product 2 (70% Train/ 30% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product26040.PNG?token=AHQQDDKYZTJSLL6KSIQEIU27CXTU6" alt="">
+Product 2 (60% Train/ 40% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product39010.PNG?token=AHQQDDOQRO4CXZDYJOQRCGK7CXTXA" alt="">
+Product 3 (90% Train/ 10% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product38020.PNG?token=AHQQDDLNAQFBFVSLFMNP6EK7CXTYU" alt="">
+Product 3 (80% Train/ 20% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product37030.PNG?token=AHQQDDPRSNE5QSS6PMBKLHC7CXT2M" alt="">
+Product 3 (70% Train/ 30% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product36040.PNG?token=AHQQDDKXOY6OQCKZLHDLBVS7CXT4E" alt="">
+Product 3 (60% Train/ 40% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product49010.PNG?token=AHQQDDLZVOIZSGIOCVTHAIK7CXT6I" alt="">
+Product 4 (90% Train/ 10% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product48020.PNG?token=AHQQDDPKSDZGAB5UEVMIBQ27CXUAK" alt="">
+Product 4 (80% Train/ 20% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product47030.PNG?token=AHQQDDOR5ZQY722Z6TZZ3US7CXUCA" alt="">
+Product 4 (70% Train/ 30% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product46040.PNG?token=AHQQDDJNMXAHQVVGB6JCUPS7CXUFK" alt="">
+Product 4 (60% Train/ 40% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product59010.PNG?token=AHQQDDLTIRFRSHHRILLPBS27CXUHY" alt="">
+Product 5 (90% Train/ 10% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product58020.PNG?token=AHQQDDJUH5KFLEE574U7XJC7CXUJ4" alt="">
+Product 5 (80% Train/ 20% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product57030.PNG?token=AHQQDDJ54QQFTEZ7XKM6ND27CXUMC" alt="">
+Product 5 (70% Train/ 30% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product56040.PNG?token=AHQQDDNQR35U7UDH2VYVJ3K7CXUNU" alt="">
+Product 5 (60% Train/ 40% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product69010.PNG?token=AHQQDDJQ7FXRSNDA7RFI76K7CXUPO" alt="">
+Product 6 (90% Train/ 10% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product68020.PNG?token=AHQQDDMDFVIEC24EJGPLFDK7CXURW" alt="">
+Product 6 (80% Train/ 20% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product67030.PNG?token=AHQQDDO3RT3SLFKDLHNBACC7CXUT4" alt="">
+Product 6 (70% Train/ 30% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product66040.PNG?token=AHQQDDKOGA3HSFQURSEU7VS7CXUWC" alt="">
+Product 6 (60% Train/ 40% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product79010.PNG?token=AHQQDDNGKQXIBCG464IVAOC7CXUX4" alt="">
+Product 7 (90% Train/ 10% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product78020.PNG?token=AHQQDDOPZBJSQOJONJ2YD2S7CXUZO" alt="">
+Product 7 (80% Train/ 20% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product77030.PNG?token=AHQQDDJM37CVI6IVMHNQCBK7CXU26" alt="">
+Product 7 (70% Train/ 30% Test)</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/product76040.PNG?token=AHQQDDP6A733EAVDKNHLEUC7CXU4S" alt="">
+Product 7 (60% Train/ 40% Test)</p>
+<p>The main way we evaluated our approach was through accuracy. Our original dataset has a rating value of 1-5 for every review in the dataset. Although we created a test dataset that cannot see the rating for each review, we can still match the predicted rating with the rating for that review in the original dataset. We judged our performance based on the accuracy of the Naive Bayes Classification of the reviews. This calculation was simply the number of reviews in the test set in which the predicted rating equalled the original, actual rating divided by the total number of reviews in the test set.</p>
+<p>While our main approach included the Naive Bayes Classifier and a lot of data preprocessing, we wanted to compare our methods to another approach, so we created a simple Support Vector Machine SVM Classifier using Python’s Sci-kit Learn library. We used the built-in vectorizer to vectorize all of the reviews in the dataset, and we used the same train/test split method. Accuracy was calculated the same way, so we were able to easily compare the results of predicting rating using a Naive Bayes Classifier and using a Support Vector Machine. You can see the comparison of accuracies of SVM and Naive Bayes below. It appeared that the SVM was consistently more accurate.</p>
+<p>The table below includes our results. As you can see the accuracies are in the high 60’s for the most part for SVM. For perspective, if our model were completely random, the accuracy would be ~33%, so we consider our accuracies a significant improvement, though far from perfect. This simple metric also makes it easy to evaluate and compare other methods of classification. For example if we were to plug our preprocessed data into a Support Vector Machine instead of a Naive Bayes Classifier, we could simply compare our accuracies to see which Machine Learning Model yields better results.</p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/excel1.PNG?token=AHQQDDIH6PF5C2I3MKAGWTC7CXVFK" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/mrho062/mrho062.github.io/master/excel2.PNG?token=AHQQDDLK5WL32YBA5HPOE5S7CXVG2" alt=""></p>
+<p>Conclusion and Possible Improvements:</p>
+<p>Our project elucidates how we can use Natural Language Processing to make computerized conclusions about text. Once more accurate models are created, the applications will be incredibly broad and effective. The online shopping industry is only one category out of countless that can benefit from Machine Learning Models such as this one. With the model we’ve created here, if it was given the appropriate training data, it should be able to use the same methods and generate sentiment predictions for any topic, whether it be products, services, etc.</p>
+<p>Our accuracies were good, but definitely far from perfect. We think that we could optimize our model by possibly using a combination of Naive Bayes and SVM. This is because Naive Bayes and SVM each work better under certain circumstances, and if we can identify these circumstances, we can potentially figure out a combination that would optimize our accuracy.</p>
+<p>References:</p>
+<p>S. Brody and N. Elhadad. An unsupervised aspect-sentiment model for online reviews. In Proceedings of the 2010 Annual Conference of the North American Chapter of the Association for Computational Linguistics, pages 804-812, Los Angeles, California, June 2010. Association for Computational-Linguistics.</p>
+<p>Y. Choi, Y. Kim, and S. H. Myaeng. Domain-specific sentiment analysis using contextual feature generation. In Proceeding of the 1st International CIKM Workshop on Topic-sentiment analysis for mass opinion, pages 37-44, New York, NY, USA, 2009. ACM.</p>
+<p>S. R. Das, M. Y. Chen, and Efa. Yahoo! for Amazon: Sentiment parsing from small talk on the web. Social Science Research Network Working Paper Series, August 2001.</p>
+<p>Ganu, Gayatree, Noemie Elhadad, and Amelie Marian. 2009. Beyond the stars: Improving rating predictions using review text content. In WebDB.</p>
+<p>C. Rain. Sentiment analysis in amazon reviews using probabilistic machine learning. Swarthmore College, 2013.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/mrho062/a.github.io">CS 4641 Final Project: Food Review Analysis</a> is maintained by <a href="https://github.com/mrho062">mrho062</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
